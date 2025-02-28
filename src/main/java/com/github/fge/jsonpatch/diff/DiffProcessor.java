@@ -56,20 +56,7 @@ final class DiffProcessor
 
     void valueAdded(final JsonPointer pointer, final JsonNode value)
     {
-        final int removalIndex = findPreviouslyRemoved(value);
-        if (removalIndex != -1) {
-            final DiffOperation removed = diffs.get(removalIndex);
-            diffs.remove(removalIndex);
-            diffs.add(DiffOperation.move(removed.getFrom(),
-                value, pointer, value));
-            return;
-        }
-        final JsonPointer ptr = findUnchangedValue(value);
-        final DiffOperation op = ptr != null
-            ? DiffOperation.copy(ptr, pointer, value)
-            : DiffOperation.add(pointer, value);
-
-        diffs.add(op);
+        diffs.add(DiffOperation.add(pointer, value));
     }
 
     JsonPatch getPatch()
